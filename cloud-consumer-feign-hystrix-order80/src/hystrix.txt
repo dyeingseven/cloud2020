@@ -1,0 +1,40 @@
+在consumer的客户端80中
+yml中：
+feign:
+  hystrix:
+    enabled: true #如果处理自身的容错就开启。开启方式与生产端不一样。
+############
+关键在于feign:hystrix:enabled: true的作用。
+官网解释“Feign将使用断路器包装所有方法”，也就是将@FeignClient标记的那个service接口下所有的方法进行了hystrix包装
+（类似于在这些方法上加了一个@HystrixCommand），
+这些方法会应用一个默认的超时时间为1s，所以你的service方法也有一个1s的超时时间，service1s就会报异常，controller立马进入备用方法。
+所以controller上那个5秒那超时时间就没有效果了。
+改变这个默认超时时间方法：
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 6000
+主启动类：@EnableHystrix
+接口实现类的方法上：@HystrixCommand(fallbackMethod = "paymentTimeOutFallbackMethod",commandProperties = {
+                 @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds",value = "1500")
+                })
+
+                //兜底方法
+                public String paymentTimeOutFallbackMethod(@PathVariable("id") Integer id){
+                    return "我是消费者80，对付支付系统繁忙请10秒钟后再试或者自己运行出错请检查自己,(┬＿┬)";
+                }
+
+在服务端的8001中
+yml中不写
+主启动类：@EnableCircuitBreaker
+接口实现类的方法上：@HystrixCommand(fallbackMethod = "paymentInfo_TimeOutHandler", commandProperties = {
+                 @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "4000")
+                })
+
+                添加服务降级handler
+                public String paymentInfo_TimeOutHandler(Integer id) {
+                   return "*****服务降级******id:" + id;
+                    }

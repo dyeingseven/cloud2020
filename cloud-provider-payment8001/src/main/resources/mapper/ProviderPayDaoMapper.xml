@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tmetal.springcloud.dao.ProviderPayDao">
+    <resultMap id="BaseResultMap" type="com.tmetal.springcloud.entities.ProviderPay">
+        <id column="id" property="id" jdbcType="BIGINT"></id>
+        <id column="serial" property="serial" jdbcType="VARCHAR"></id>
+    </resultMap>
+
+    <insert id="create" parameterType="com.tmetal.springcloud.entities.ProviderPay" useGeneratedKeys="true" keyProperty="id">
+            insert into provider_pay(serial) values(#{serial});
+    </insert>
+
+    <select id="getProviderPayById" parameterType="Long" resultMap="BaseResultMap">
+            select * from provider_pay where id=#{id}
+    </select>
+
+
+</mapper>
