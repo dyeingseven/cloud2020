@@ -13,3 +13,6 @@ Nacos： https://nacos.io/zh-cn/docs/what-is-nacos.html
 Sentinel：https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D
 
 在Hystrix基础上增加了流控规则和持久化,alibaba体系的一员。
+
+*springcloud-bus(RabbitMQ)/Stream/Sleuth未实现。
+*nginx+nacos+mysql的linux配置未实现。
