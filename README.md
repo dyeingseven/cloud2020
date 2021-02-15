@@ -16,3 +16,4 @@ Sentinel：https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D
 
 *springcloud-bus(RabbitMQ)/Stream/Sleuth未实现。
 *nginx+nacos+mysql的linux配置未实现。
+*seata的2002和2003未实现。
